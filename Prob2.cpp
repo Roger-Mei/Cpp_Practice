@@ -57,7 +57,7 @@ struct TwoJunctions
         };
 
         std::priority_queue<int, std::vector<int>, decltype(comp)> res(comp); // initialize resolution
-        
+
         std::priority_queue<Node*, std::vector<Node*>, decltype(comp)> frontier(comp); // initialize frontier
 
         for (auto neighbor : map[start - 1]->neighbors)
@@ -100,15 +100,13 @@ struct TwoJunctions
                 // judge whether arrives goal with constraints satisfied
                 if ((neighbor.first->name == end) && (neighbor.first->XFlag) && (neighbor.first->YFlag))
                 {
-
+                    res.push(neighbor.first->cost);
                 }
             }
-
         }
 
-
-
-        
+        if (res.empty()) return -1; // There is no feasible solution
+        return res.top();
     }
 
 private:

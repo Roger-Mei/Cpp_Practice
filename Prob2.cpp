@@ -3,11 +3,13 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <unordered_set>
+#include <bits/stdc++.h>
 
 struct Node
 {
     int name; // name of the node is represented by integer
-    int cost; // cost from origin point to current point
+    int cost = INT_MAX; // cost from origin point to current point
     bool XFlag = false; // initialize XFlag to be false. This means we haven't arrive x yet.
     bool YFlag = false; // initialize YFlag to be false. This means we haven't arrive y yet.
     std::unordered_map<Node*, int> neighbors; // neighbors of the current node, key->node pointer, value->edge weight
@@ -50,15 +52,17 @@ struct TwoJunctions
         This functrion calculate the shortest path from origin point to the goal point with constraints satisfied. 
         Dijkstra's algorithm is adopted. If no suitable path, return -1
         */
+        
+        int res = INT_MAX;
 
         auto comp = [](const Node* a, const Node* b)
         {
             return a->cost < b->cost;
         };
 
-        std::priority_queue<int, std::vector<int>, decltype(comp)> res(comp); // initialize resolution
-
         std::priority_queue<Node*, std::vector<Node*>, decltype(comp)> frontier(comp); // initialize frontier
+
+        map[start - 1] -> cost = 0; // initialize start cost
 
         for (auto neighbor : map[start - 1]->neighbors)
         {
@@ -71,20 +75,32 @@ struct TwoJunctions
                 neighbor.first->XFlag = true; // update XFlag
             }
 
-            neighbor.first->cost += neighbor.second;// update the cost
-            frontier.push(neighbor.first);
+            neighbor.first->cost = map[start - 1]->cost + neighbor.second;// update the cost
+
+            frontier.push(neighbor.first); // push into the queue
         }
 
         while(!frontier.empty())
         {
             auto curr = frontier.top();
 
+            // Justify the termination
+            if ((res != INT_MAX) && (curr->cost > res)) 
+            {
+                break; // No need to proceed forward
+            }
+
             frontier.pop();
 
             for (auto neighbor : curr->neighbors)
             {
-                // falg updating
-                neighbor.first->XFlag = curr->XFlag; // update XFlag
+                // update flag
+                neighbor.first->XFlag = curr->XFlag; // inherit XFlag
+                neighbor.first->YFlag = curr->YFlag; // inherit YFlag
+                if (neighbor.first->name == x)
+                {
+                    neighbor.first->XFlag = true; // update XFlag
+                }
                 if ((neighbor.first->name == y) && (!neighbor.first->XFlag))
                 {
                     continue; // if we arrive y before arriving x, this path is invalid
@@ -100,13 +116,27 @@ struct TwoJunctions
                 // judge whether arrives goal with constraints satisfied
                 if ((neighbor.first->name == end) && (neighbor.first->XFlag) && (neighbor.first->YFlag))
                 {
-                    res.push(neighbor.first->cost);
+                    res = std::min(res, neighbor.first->cost); // update resolution
+                }
+                else
+                {
+                    for (auto next : neighbor.first->neighbors)
+                    {
+                        frontier.push(next.first); // update frontier
+                    }
                 }
             }
         }
 
-        if (res.empty()) return -1; // There is no feasible solution
-        return res.top();
+        if (res == INT_MAX)
+        {
+            return -1; // There is no feasible solution
+        }
+        else
+        {
+            return res; // There is a feasible solution
+        }
+       
     }
 
 private:

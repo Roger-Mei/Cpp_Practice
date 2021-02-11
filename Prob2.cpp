@@ -17,15 +17,6 @@ struct Node
 
 struct TwoJunctions
 {
-    int MinShortestPath()
-    {
-        /*
-        This functrion calculate the shortest path from origin point to the goal point with constraints satisfied. 
-        If no suitable path, return -1
-        */
-
-    }
-
     // constructor
     TwoJunctions(int n, int _x, int _y, 
                 std::vector<int>& from, std::vector<int>& to, std::vector<int>& weight)
@@ -40,6 +31,15 @@ struct TwoJunctions
 
         // build up the map
         BuildMap();
+    }
+
+    int MinShortestPath()
+    {
+        /*
+        This functrion calculate the shortest path from origin point to the goal point with constraints satisfied. 
+        If no suitable path, return -1
+        */
+
     }
 
 private:
@@ -88,5 +88,19 @@ private:
 
 int main()
 {
+    // initialize inputs
+    int g_node = 5;
+    int x = 2;
+    int y = 3;
+    std::vector<int> g_from{1, 2, 3, 4, 5, 3};
+    std::vector<int> g_to{2, 3, 4, 5, 1, 5};
+    std::vector<int> g_weight{9, 11, 6, 1, 4, 10};
 
+    TwoJunctions Solver(g_node, x, y, g_from, g_to, g_weight);
+
+    int res = Solver.MinShortestPath();
+
+    std::cout << "The minimum cost is: " << res << std::endl;
+
+    return 0;
 }

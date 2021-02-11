@@ -62,9 +62,9 @@ struct TwoJunctions
 
         std::priority_queue<Node*, std::vector<Node*>, decltype(comp)> frontier(comp); // initialize frontier
 
-        map[start - 1] -> cost = 0; // initialize start cost
+        graph[start - 1] -> cost = 0; // initialize start cost
 
-        for (auto neighbor : map[start - 1]->neighbors)
+        for (auto neighbor : graph[start - 1]->neighbors)
         {
             if ((neighbor.first->name == y) && (!neighbor.first->XFlag))
             {
@@ -75,9 +75,11 @@ struct TwoJunctions
                 neighbor.first->XFlag = true; // update XFlag
             }
 
-            neighbor.first->cost = map[start - 1]->cost + neighbor.second;// update the cost
-
-            frontier.push(neighbor.first); // push into the queue
+            if (neighbor.first->name != end)
+            {
+                neighbor.first->cost = graph[start - 1]->cost + neighbor.second;// conditionally update the cost
+                frontier.push(neighbor.first); // push into the queue
+            }
         }
 
         while(!frontier.empty())
@@ -154,10 +156,10 @@ private:
         }
        
         // Initialize the nodes and map
-        for (int name = 1; name  < g_nodes; name++)
+        for (int name = 1; name <= g_nodes; name++)
         {   
             Node temp_node(name);
-            map.push_back(&temp_node);
+            graph.push_back(&temp_node);
         }
 
         // construct edges
@@ -167,8 +169,8 @@ private:
             int to = g_to[idx];
             int weight = g_weight[idx];
 
-            map[from - 1]->neighbors[map[to - 1]] = weight; // -1 because node number start from 1
-            map[to - 1]->neighbors[map[from - 1]] = weight;
+            graph[from - 1]->neighbors[graph[to - 1]] = weight; // -1 because node number start from 1
+            graph[to - 1]->neighbors[graph[from - 1]] = weight;
         }
     }
 
@@ -182,7 +184,7 @@ private:
     std::vector<int> g_to; // end points
     std::vector<int> g_weight; // edge weights
 
-    std::vector<Node*> map; // graphic map
+    std::vector<Node*> graph; // graphic map
 }; 
 
 int main()

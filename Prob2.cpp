@@ -127,6 +127,12 @@ struct TwoJunctions
             }
         }
 
+        // release the memory 
+        for (auto node : graph)
+        {
+            delete node;
+        }
+
         if (res == INT_MAX)
         {
             return -1; // There is no feasible solution
@@ -135,6 +141,8 @@ struct TwoJunctions
         {
             return res; // There is a feasible solution
         }
+
+       
        
     }
 
@@ -173,15 +181,14 @@ private:
     }
 
 private:
-    int start;
-    int end;
+    int start; // name of start point
+    int end; // name of end point
     int g_nodes; // number of total 
     int x; // first restrict point
     int y; // second restrict point
     std::vector<int> g_from; // initial points
     std::vector<int> g_to; // end points
     std::vector<int> g_weight; // edge weights
-
     std::vector<Node*> graph; // graphic map
 }; 
 

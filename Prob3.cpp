@@ -1,11 +1,40 @@
 #include <iostream>
+#include <numeric>
+
+int GCD (int a, int b)
+{
+    /*
+    This function will return the greatest common divisor of two integers 
+    */
+   while (b != 0)
+   {
+       a = b;
+       b = a % b;
+   }
+   
+   return a;
+}
 
 bool IsCoprime (int a, int b)
 {
     /*
-    Given two integers, this function would use method of successive division to justify whether the two integers are coprime or not
+    Given two integers (a > b by default), this function would justify whether the two integers are coprime or not.
     */
 
+    if (a < b)
+    {
+        std::swap(a, b); // swap a and b to make a > b
+    }
+
+    if (GCD(a,b) == 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+    
 }
 
 int TotalRotorConfiguration(int rotorCount, int minRotorValue, int maxRotorValue)

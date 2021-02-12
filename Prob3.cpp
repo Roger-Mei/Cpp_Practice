@@ -1,18 +1,20 @@
 #include <iostream>
-#include <numeric>
+#include <math.h>
 
 int GCD (int a, int b)
 {
     /*
     This function will return the greatest common divisor of two integers 
     */
-   while (b != 0)
+
+   if (b == 0)
    {
-       a = b;
-       b = a % b;
+       return a;
    }
-   
-   return a;
+   else
+   {
+       return GCD(b, a%b);
+   }
 }
 
 bool IsCoprime (int a, int b)
@@ -42,6 +44,23 @@ int TotalRotorConfiguration(int rotorCount, int minRotorValue, int maxRotorValue
     /*
     Given number of variable, range of variable, the output is the total number of feasible solutions for Enigma
     */
+    int res = 0; // initialize resolution
+
+    for (int begin = minRotorValue; begin <= maxRotorValue; begin++)
+    {
+        int num_coprime = 0; // initialize number of coprimes to the first number 
+
+        for (int idx = minRotorValue; idx <= maxRotorValue; idx++)
+        {
+            if (IsCoprime(begin, idx))
+            {
+                num_coprime++;
+            }
+        }
+        res += pow(num_coprime, rotorCount - 1);
+    }
+
+    return res;
 }
 
 int main()

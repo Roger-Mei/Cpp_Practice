@@ -57,7 +57,7 @@ struct TwoJunctions
 
         auto comp = [](const Node* a, const Node* b)
         {
-            return a->cost < b->cost;
+            return a->cost > b->cost;
         };
 
         std::priority_queue<Node*, std::vector<Node*>, decltype(comp)> frontier(comp); // initialize frontier
@@ -81,7 +81,7 @@ struct TwoJunctions
                 frontier.push(neighbor.first); // push into the queue
             }
         }
-
+        
         while(!frontier.empty())
         {
             auto curr = frontier.top();
@@ -113,7 +113,7 @@ struct TwoJunctions
                 }
                 
                 // update path cost
-                neighbor.first->cost = std::min(curr->cost + neighbor.second, neighbor.first->cost);
+                neighbor.first->cost = curr->cost + neighbor.second;
 
                 // judge whether arrives goal with constraints satisfied
                 if ((neighbor.first->name == end) && (neighbor.first->XFlag) && (neighbor.first->YFlag))
@@ -122,10 +122,7 @@ struct TwoJunctions
                 }
                 else
                 {
-                    for (auto next : neighbor.first->neighbors)
-                    {
-                        frontier.push(next.first); // update frontier
-                    }
+                    frontier.push(neighbor.first);
                 }
             }
         }
@@ -158,8 +155,9 @@ private:
         // Initialize the nodes and map
         for (int name = 1; name <= g_nodes; name++)
         {   
-            Node temp_node(name);
-            graph.push_back(&temp_node);
+            Node* p = nullptr;
+            p = new Node(name);
+            graph.push_back(p);
         }
 
         // construct edges

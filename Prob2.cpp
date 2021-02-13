@@ -49,8 +49,8 @@ struct TwoJunctions
     int MinShortestPath()
     {
         /*
-        This functrion calculate the shortest path from origin point to the goal point with constraints satisfied. 
-        Dijkstra's algorithm is adopted. If no suitable path, return -1
+        * This functrion calculate the shortest path from origin point to the goal point with constraints satisfied. 
+        * Dijkstra's algorithm is adopted. If no suitable path, return -1
         */
         
         int res = INT_MAX;
@@ -150,7 +150,7 @@ private:
     void BuildMap()
     {
         /*
-        This function will read the given input information and build up the map
+        * This function will read the given input information and build up the map
         */
 
         // corner case check
@@ -163,8 +163,7 @@ private:
         // Initialize the nodes and map
         for (int name = 1; name <= g_nodes; name++)
         {   
-            Node* p = nullptr;
-            p = new Node(name);
+            Node* p = new Node(name);
             graph.push_back(p);
         }
 
